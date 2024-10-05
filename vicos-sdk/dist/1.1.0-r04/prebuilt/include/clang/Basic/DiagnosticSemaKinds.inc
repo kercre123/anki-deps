@@ -1122,7 +1122,7 @@ DIAG(err_omp_declare_reduction_redefinition, CLASS_ERROR, (unsigned)diag::Severi
 DIAG(err_omp_declare_target_multiple, CLASS_ERROR, (unsigned)diag::Severity::Error, "%0 appears multiple times in clauses on the same declare target directive", 0, SFINAE_SubstitutionFailure, false, true, 11)
 DIAG(err_omp_declare_target_to_and_link, CLASS_ERROR, (unsigned)diag::Severity::Error, "%0 must not appear in both clauses 'to' and 'link'", 0, SFINAE_SubstitutionFailure, false, true, 11)
 DIAG(err_omp_depend_clause_thread_simd, CLASS_ERROR, (unsigned)diag::Severity::Error, "'depend' clauses cannot be mixed with '%0' clause", 0, SFINAE_SubstitutionFailure, false, true, 11)
-DIAG(err_omp_depend_sink_expected_loop_iteration, CLASS_ERROR, (unsigned)diag::Severity::Error, "expected %0 loop iteration variable", 0, SFINAE_SubstitutionFailure, false, true, 11)
+DIAG(err_omp_depend_sink_expected_loop_iteration, CLASS_ERROR, (unsigned)diag::Severity::Error, "expected%select{| %1}0 loop iteration variable", 0, SFINAE_SubstitutionFailure, false, true, 11)
 DIAG(err_omp_depend_sink_expected_plus_minus, CLASS_ERROR, (unsigned)diag::Severity::Error, "expected '+' or '-' operation", 0, SFINAE_SubstitutionFailure, false, true, 11)
 DIAG(err_omp_depend_sink_source_not_allowed, CLASS_ERROR, (unsigned)diag::Severity::Error, "'depend(%select{source|sink:vec}0)' clause%select{|s}0 cannot be mixed with 'depend(%select{sink:vec|source}0)' clause%select{s|}0", 0, SFINAE_SubstitutionFailure, false, true, 11)
 DIAG(err_omp_depend_sink_unexpected_expr, CLASS_ERROR, (unsigned)diag::Severity::Error, "unexpected expression: number of expressions is larger than the number of associated loops", 0, SFINAE_SubstitutionFailure, false, true, 11)

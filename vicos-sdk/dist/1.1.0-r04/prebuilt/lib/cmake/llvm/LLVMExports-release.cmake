@@ -207,12 +207,12 @@ list(APPEND _IMPORT_CHECK_FILES_FOR_LLVMVectorize "${_IMPORT_PREFIX}/lib/libLLVM
 # Import target "LLVMHello" for configuration "Release"
 set_property(TARGET LLVMHello APPEND PROPERTY IMPORTED_CONFIGURATIONS RELEASE)
 set_target_properties(LLVMHello PROPERTIES
-  IMPORTED_LOCATION_RELEASE "${_IMPORT_PREFIX}/lib/LLVMHello.so"
+  IMPORTED_LOCATION_RELEASE "${_IMPORT_PREFIX}/lib/LLVMHello.dylib"
   IMPORTED_NO_SONAME_RELEASE "TRUE"
   )
 
 list(APPEND _IMPORT_CHECK_TARGETS LLVMHello )
-list(APPEND _IMPORT_CHECK_FILES_FOR_LLVMHello "${_IMPORT_PREFIX}/lib/LLVMHello.so" )
+list(APPEND _IMPORT_CHECK_FILES_FOR_LLVMHello "${_IMPORT_PREFIX}/lib/LLVMHello.dylib" )
 
 # Import target "LLVMObjCARCOpts" for configuration "Release"
 set_property(TARGET LLVMObjCARCOpts APPEND PROPERTY IMPORTED_CONFIGURATIONS RELEASE)
@@ -1357,12 +1357,12 @@ list(APPEND _IMPORT_CHECK_FILES_FOR_LLVMPolly "${_IMPORT_PREFIX}/lib/LLVMPolly.s
 # Import target "LTO" for configuration "Release"
 set_property(TARGET LTO APPEND PROPERTY IMPORTED_CONFIGURATIONS RELEASE)
 set_target_properties(LTO PROPERTIES
-  IMPORTED_LOCATION_RELEASE "${_IMPORT_PREFIX}/lib/libLTO.so.5.0.0"
-  IMPORTED_SONAME_RELEASE "libLTO.so.5"
+  IMPORTED_LOCATION_RELEASE "${_IMPORT_PREFIX}/lib/libLTO.dylib"
+  IMPORTED_SONAME_RELEASE "@rpath/libLTO.dylib"
   )
 
 list(APPEND _IMPORT_CHECK_TARGETS LTO )
-list(APPEND _IMPORT_CHECK_FILES_FOR_LTO "${_IMPORT_PREFIX}/lib/libLTO.so.5.0.0" )
+list(APPEND _IMPORT_CHECK_FILES_FOR_LTO "${_IMPORT_PREFIX}/lib/libLTO.dylib" )
 
 # Import target "llvm-ar" for configuration "Release"
 set_property(TARGET llvm-ar APPEND PROPERTY IMPORTED_CONFIGURATIONS RELEASE)
@@ -1412,12 +1412,12 @@ list(APPEND _IMPORT_CHECK_FILES_FOR_bugpoint "${_IMPORT_PREFIX}/bin/bugpoint" )
 # Import target "BugpointPasses" for configuration "Release"
 set_property(TARGET BugpointPasses APPEND PROPERTY IMPORTED_CONFIGURATIONS RELEASE)
 set_target_properties(BugpointPasses PROPERTIES
-  IMPORTED_LOCATION_RELEASE "${_IMPORT_PREFIX}/lib/BugpointPasses.so"
+  IMPORTED_LOCATION_RELEASE "${_IMPORT_PREFIX}/lib/BugpointPasses.dylib"
   IMPORTED_NO_SONAME_RELEASE "TRUE"
   )
 
 list(APPEND _IMPORT_CHECK_TARGETS BugpointPasses )
-list(APPEND _IMPORT_CHECK_FILES_FOR_BugpointPasses "${_IMPORT_PREFIX}/lib/BugpointPasses.so" )
+list(APPEND _IMPORT_CHECK_FILES_FOR_BugpointPasses "${_IMPORT_PREFIX}/lib/BugpointPasses.dylib" )
 
 # Import target "llvm-dsymutil" for configuration "Release"
 set_property(TARGET llvm-dsymutil APPEND PROPERTY IMPORTED_CONFIGURATIONS RELEASE)

@@ -1,0 +1,7 @@
+version:1.1.0
+revision:r04
+sysroot:1.1.0-f98407f
+llvm:5.0.1
+binutils:2.30
+target:arm-oe-linux-gnueabi
+host:x86_64-apple-darwin

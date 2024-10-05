@@ -36,7 +36,7 @@
 #define GCC_INSTALL_PREFIX ""
 
 /* Define if we have libxml2 */
-/* #undef CLANG_HAVE_LIBXML */
+#define CLANG_HAVE_LIBXML 1
 
 /* Define if we have z3 and want to build it */
 /* #undef CLANG_ANALYZER_WITH_Z3 */
@@ -45,10 +45,10 @@
 #define CLANG_HAVE_RLIMITS 1
 
 /* The LLVM product name and version */
-#define BACKEND_PACKAGE_STRING "LLVM 5.0.0"
+#define BACKEND_PACKAGE_STRING "LLVM 5.0.1"
 
 /* Linker version detected at compile time. */
-/* #undef HOST_LINK_VERSION */
+#define HOST_LINK_VERSION "351.4"
 
 /* pass --build-id to ld */
 /* #undef ENABLE_LINKER_BUILD_ID */

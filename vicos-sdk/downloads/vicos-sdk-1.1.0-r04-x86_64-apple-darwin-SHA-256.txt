@@ -1,0 +1,1 @@
+bba436e744324b906c559d4c0f83645dc1e89194744c2318d334ab283002aabd  vicos-sdk-1.1.0-r04-x86_64-apple-darwin.tar.bz2
