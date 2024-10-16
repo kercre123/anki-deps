@@ -1,1 +1,2 @@
 wwise/versions/2017.2.7_a/libs/mac/release/libAkSoundEngine.a filter=lfs diff=lfs merge=lfs -text
+wwise/versions/2017.2.7_a/libs/mac/profile/libAkSoundEngine.a filter=lfs diff=lfs merge=lfs -text
