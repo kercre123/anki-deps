@@ -1,5 +1,5 @@
 /* Script for ld -Ur: link w/out relocation, do create constructors */
-/* Copyright (C) 2014-2017 Free Software Foundation, Inc.
+/* Copyright (C) 2014-2018 Free Software Foundation, Inc.
    Copying and distribution of this script, with or without modification,
    are permitted in any medium without royalty provided the copyright
    notice and this notice are preserved.  */
@@ -100,10 +100,6 @@ SECTIONS
   /* Thread Local Storage sections  */
   .tdata	0 : { *(.tdata) }
   .tbss		0 : { *(.tbss) }
-  .preinit_array   0 :
-  {
-    KEEP (*(.preinit_array))
-  }
   .jcr          0 : { KEEP (*(.jcr)) }
   .dynamic      0 : { *(.dynamic) }
   .got          0 : { *(.got.plt) *(.igot.plt) *(.got) *(.igot) }
