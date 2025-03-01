@@ -18,7 +18,7 @@
 #define LINK_POLLY_INTO_TOOLS
 
 /* Target triple LLVM will generate code for by default */
-#define LLVM_DEFAULT_TARGET_TRIPLE "x86_64-unknown-linux-gnu"
+#define LLVM_DEFAULT_TARGET_TRIPLE "aarch64-unknown-linux-gnu"
 
 /* Define if threads enabled */
 #define LLVM_ENABLE_THREADS 1
@@ -27,28 +27,28 @@
 #define LLVM_HAS_ATOMICS 1
 
 /* Host triple LLVM will be executed on */
-#define LLVM_HOST_TRIPLE "x86_64-unknown-linux-gnu"
+#define LLVM_HOST_TRIPLE "aarch64-unknown-linux-gnu"
 
 /* LLVM architecture name for the native architecture, if available */
-#define LLVM_NATIVE_ARCH X86
+#define LLVM_NATIVE_ARCH AArch64
 
 /* LLVM name for the native AsmParser init function, if available */
-#define LLVM_NATIVE_ASMPARSER LLVMInitializeX86AsmParser
+#define LLVM_NATIVE_ASMPARSER LLVMInitializeAArch64AsmParser
 
 /* LLVM name for the native AsmPrinter init function, if available */
-#define LLVM_NATIVE_ASMPRINTER LLVMInitializeX86AsmPrinter
+#define LLVM_NATIVE_ASMPRINTER LLVMInitializeAArch64AsmPrinter
 
 /* LLVM name for the native Disassembler init function, if available */
-#define LLVM_NATIVE_DISASSEMBLER LLVMInitializeX86Disassembler
+#define LLVM_NATIVE_DISASSEMBLER LLVMInitializeAArch64Disassembler
 
 /* LLVM name for the native Target init function, if available */
-#define LLVM_NATIVE_TARGET LLVMInitializeX86Target
+#define LLVM_NATIVE_TARGET LLVMInitializeAArch64Target
 
 /* LLVM name for the native TargetInfo init function, if available */
-#define LLVM_NATIVE_TARGETINFO LLVMInitializeX86TargetInfo
+#define LLVM_NATIVE_TARGETINFO LLVMInitializeAArch64TargetInfo
 
 /* LLVM name for the native target MC init function, if available */
-#define LLVM_NATIVE_TARGETMC LLVMInitializeX86TargetMC
+#define LLVM_NATIVE_TARGETMC LLVMInitializeAArch64TargetMC
 
 /* Define if this is Unixish platform */
 #define LLVM_ON_UNIX 1
