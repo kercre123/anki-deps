@@ -6,10 +6,16 @@
 #define CLANG_CONFIG_H
 
 /* Bug report URL. */
-#define BUG_REPORT_URL "http://llvm.org/bugs/"
+#define BUG_REPORT_URL "https://bugs.llvm.org/"
 
 /* Default linker to use. */
 #define CLANG_DEFAULT_LINKER ""
+
+/* Default C/ObjC standard to use. */
+/* #undef CLANG_DEFAULT_STD_C */
+
+/* Default C++/ObjC++ standard to use. */
+/* #undef CLANG_DEFAULT_STD_CXX */
 
 /* Default C++ stdlib to use. */
 #define CLANG_DEFAULT_CXX_STDLIB ""
@@ -17,8 +23,14 @@
 /* Default runtime library to use. */
 #define CLANG_DEFAULT_RTLIB ""
 
+/* Default objcopy to use */
+#define CLANG_DEFAULT_OBJCOPY "objcopy"
+
 /* Default OpenMP runtime used by -fopenmp. */
 #define CLANG_DEFAULT_OPENMP_RUNTIME "libomp"
+
+/* Default architecture for OpenMP offloading to Nvidia GPUs. */
+#define CLANG_OPENMP_NVPTX_DEFAULT_ARCH "sm_35"
 
 /* Multilib suffix for libdir. */
 #define CLANG_LIBDIR_SUFFIX ""
@@ -28,6 +40,10 @@
 
 /* Directories clang will search for headers */
 #define C_INCLUDE_DIRS ""
+
+/* Directories clang will search for configuration files */
+/* #undef CLANG_CONFIG_FILE_SYSTEM_DIR */
+/* #undef CLANG_CONFIG_FILE_USER_DIR */
 
 /* Default <path> to all compiler invocations for --sysroot=<path>. */
 #define DEFAULT_SYSROOT ""
@@ -45,10 +61,10 @@
 #define CLANG_HAVE_RLIMITS 1
 
 /* The LLVM product name and version */
-#define BACKEND_PACKAGE_STRING "LLVM 5.0.1"
+#define BACKEND_PACKAGE_STRING "LLVM 7.0.1"
 
 /* Linker version detected at compile time. */
-#define HOST_LINK_VERSION "351.4"
+#define HOST_LINK_VERSION "1115.7.3"
 
 /* pass --build-id to ld */
 /* #undef ENABLE_LINKER_BUILD_ID */
@@ -56,9 +72,12 @@
 /* enable x86 relax relocations by default */
 #define ENABLE_X86_RELAX_RELOCATIONS 0
 
+/* Enable the experimental new pass manager by default */
+#define ENABLE_EXPERIMENTAL_NEW_PASS_MANAGER 0
+
 /* Enable each functionality of modules */
-#define CLANG_ENABLE_ARCMT
-#define CLANG_ENABLE_OBJC_REWRITER
-#define CLANG_ENABLE_STATIC_ANALYZER
+#define CLANG_ENABLE_ARCMT 1
+#define CLANG_ENABLE_OBJC_REWRITER 1
+#define CLANG_ENABLE_STATIC_ANALYZER 1
 
 #endif

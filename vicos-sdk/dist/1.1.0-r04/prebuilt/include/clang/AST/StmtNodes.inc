@@ -519,6 +519,12 @@ EXPRESSIONTRAITEXPR(ExpressionTraitExpr, Expr)
 EXTVECTORELEMENTEXPR(ExtVectorElementExpr, Expr)
 #undef EXTVECTORELEMENTEXPR
 
+#ifndef FIXEDPOINTLITERAL
+#  define FIXEDPOINTLITERAL(Type, Base) EXPR(Type, Base)
+#endif
+FIXEDPOINTLITERAL(FixedPointLiteral, Expr)
+#undef FIXEDPOINTLITERAL
+
 #ifndef FLOATINGLITERAL
 #  define FLOATINGLITERAL(Type, Base) EXPR(Type, Base)
 #endif

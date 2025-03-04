@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.5.0)
+cmake_minimum_required(VERSION 3.6.0)
 
 # CMake invokes the toolchain file twice during the first build, but only once
 # during subsequent rebuilds. This was causing the various flags to be added
@@ -38,6 +38,7 @@ set(VICOS_CPP_FEATURES rtti exceptions)
 file(TO_CMAKE_PATH "${VICOS_SDK}" VICOS_SDK)
 
 # Standard cross-compiling stuff.
+set(VICOS_LE TRUE)
 set(VICOS TRUE)
 
 set(CMAKE_SYSTEM_NAME Linux)
@@ -64,8 +65,6 @@ set(VICOS_TOOLCHAIN_ROOT arm-oe-linux-gnueabi)
 # uname -p on vicos returns unknown
 set(CMAKE_SYSTEM_PROCESSOR arm)
 
-set(CMAKE_BUILD_WITH_INSTALL_RPATH TRUE)
-
 set(VICOS_LLVM_TRIPLE arm-oe-linux-gnueabi)
 
 # Toolchain.
@@ -79,9 +78,9 @@ set(VICOS_TOOLCHAIN_ROOT "${VICOS_SDK}/prebuilt")
 set(VICOS_TOOLCHAIN_PREFIX "${VICOS_TOOLCHAIN_ROOT}/bin/${VICOS_TOOLCHAIN_NAME}-")
 
 # BRC these defines are important
-set(VICOS_LLVM_TOOLCHAIN_PREFIX "${VICOS_SDK}/prebuilt/bin/${VICOS_TOOLCHAIN_NAME}-")
-set(VICOS_C_COMPILER   "${VICOS_LLVM_TOOLCHAIN_PREFIX}clang${VICOS_TOOLCHAIN_SUFFIX}")
-set(VICOS_CXX_COMPILER "${VICOS_LLVM_TOOLCHAIN_PREFIX}clang++${VICOS_TOOLCHAIN_SUFFIX}")
+set(VICOS_C_COMPILER   "${VICOS_TOOLCHAIN_PREFIX}clang${VICOS_TOOLCHAIN_SUFFIX}")
+set(VICOS_CXX_COMPILER "${VICOS_TOOLCHAIN_PREFIX}clang++${VICOS_TOOLCHAIN_SUFFIX}")
+
 set(CMAKE_C_COMPILER_TARGET   ${VICOS_LLVM_TRIPLE})
 set(CMAKE_CXX_COMPILER_TARGET ${VICOS_LLVM_TRIPLE})
 set(CMAKE_C_COMPILER_EXTERNAL_TOOLCHAIN   "${VICOS_TOOLCHAIN_ROOT}")
@@ -215,9 +214,11 @@ if(VICOS_CCACHE)
     set(CMAKE_C_COMPILER_LAUNCHER   "${VICOS_CCACHE}")
     set(CMAKE_CXX_COMPILER_LAUNCHER "${VICOS_CCACHE}")
 endif()
-set(CMAKE_C_COMPILER        "${VICOS_C_COMPILER}")
-set(CMAKE_CXX_COMPILER      "${VICOS_CXX_COMPILER}")
-set(_CMAKE_TOOLCHAIN_PREFIX "${VICOS_TOOLCHAIN_PREFIX}")
+set(CMAKE_C_COMPILER        "${VICOS_C_COMPILER}"               CACHE INTERNAL "")
+set(CMAKE_CXX_COMPILER      "${VICOS_CXX_COMPILER}"             CACHE INTERNAL "")
+set(CMAKE_AR                "${VICOS_TOOLCHAIN_PREFIX}ar"       CACHE INTERNAL "")
+set(CMAKE_RANLIB            "${VICOS_TOOLCHAIN_PREFIX}ranlib"   CACHE INTERNAL "")
+set(_CMAKE_TOOLCHAIN_PREFIX "${VICOS_TOOLCHAIN_PREFIX}"         CACHE INTERNAL "")
 
 # Run the compiler ID checks before we set flags.
 # When passed the `-march=` flag, Clang can fail to compile if CMake doesn't

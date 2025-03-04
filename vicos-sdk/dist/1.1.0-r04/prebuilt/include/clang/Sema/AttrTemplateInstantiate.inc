@@ -133,6 +133,10 @@ Attr *instantiateTemplateAttribute(const Attr *At, ASTContext &C, Sema &S,
       const auto *A = cast<AnyX86NoCallerSavedRegistersAttr>(At);
       return A->clone(C);
     }
+    case attr::AnyX86NoCfCheck: {
+      const auto *A = cast<AnyX86NoCfCheckAttr>(At);
+      return A->clone(C);
+    }
     case attr::ArcWeakrefUnavailable: {
       const auto *A = cast<ArcWeakrefUnavailableAttr>(At);
       return A->clone(C);
@@ -141,19 +145,28 @@ Attr *instantiateTemplateAttribute(const Attr *At, ASTContext &C, Sema &S,
       const auto *A = cast<ArgumentWithTypeTagAttr>(At);
       return A->clone(C);
     }
+    case attr::Artificial: {
+      const auto *A = cast<ArtificialAttr>(At);
+      return A->clone(C);
+    }
     case attr::AsmLabel: {
       const auto *A = cast<AsmLabelAttr>(At);
       return A->clone(C);
     }
     case attr::AssertCapability: {
       const auto *A = cast<AssertCapabilityAttr>(At);
-      Expr * tempInstExpr;
+      auto *tempInstArgs = new (C, 16) Expr *[A->args_size()];
       {
         EnterExpressionEvaluationContext Unevaluated(S, Sema::ExpressionEvaluationContext::Unevaluated);
-        ExprResult Result = S.SubstExpr(A->getExpr(), TemplateArgs);
-        tempInstExpr = Result.getAs<Expr>();
+        Expr * *TI = tempInstArgs;
+        Expr * *I = A->args_begin();
+        Expr * *E = A->args_end();
+        for (; I != E; ++I, ++TI) {
+          ExprResult Result = S.SubstExpr(*I, TemplateArgs);
+          *TI = Result.getAs<Expr>();
+        }
       }
-      return new (C) AssertCapabilityAttr(A->getLocation(), C, tempInstExpr, A->getSpellingListIndex());
+      return new (C) AssertCapabilityAttr(A->getLocation(), C, tempInstArgs, A->args_size(), A->getSpellingListIndex());
     }
     case attr::AssertExclusiveLock: {
       const auto *A = cast<AssertExclusiveLockAttr>(At);
@@ -225,6 +238,14 @@ Attr *instantiateTemplateAttribute(const Attr *At, ASTContext &C, Sema &S,
       const auto *A = cast<CFUnknownTransferAttr>(At);
       return A->clone(C);
     }
+    case attr::CPUDispatch: {
+      const auto *A = cast<CPUDispatchAttr>(At);
+      return A->clone(C);
+    }
+    case attr::CPUSpecific: {
+      const auto *A = cast<CPUSpecificAttr>(At);
+      return A->clone(C);
+    }
     case attr::CUDAConstant: {
       const auto *A = cast<CUDAConstantAttr>(At);
       return A->clone(C);
@@ -275,6 +296,10 @@ Attr *instantiateTemplateAttribute(const Attr *At, ASTContext &C, Sema &S,
     }
     case attr::Cleanup: {
       const auto *A = cast<CleanupAttr>(At);
+      return A->clone(C);
+    }
+    case attr::CodeSeg: {
+      const auto *A = cast<CodeSegAttr>(At);
       return A->clone(C);
     }
     case attr::Cold: {
@@ -472,6 +497,10 @@ Attr *instantiateTemplateAttribute(const Attr *At, ASTContext &C, Sema &S,
       const auto *A = cast<LayoutVersionAttr>(At);
       return A->clone(C);
     }
+    case attr::LifetimeBound: {
+      const auto *A = cast<LifetimeBoundAttr>(At);
+      return A->clone(C);
+    }
     case attr::LockReturned: {
       const auto *A = cast<LockReturnedAttr>(At);
       Expr * tempInstArg;
@@ -541,12 +570,24 @@ Attr *instantiateTemplateAttribute(const Attr *At, ASTContext &C, Sema &S,
       const auto *A = cast<MinSizeAttr>(At);
       return A->clone(C);
     }
+    case attr::MinVectorWidth: {
+      const auto *A = cast<MinVectorWidthAttr>(At);
+      return A->clone(C);
+    }
     case attr::Mips16: {
       const auto *A = cast<Mips16Attr>(At);
       return A->clone(C);
     }
     case attr::MipsInterrupt: {
       const auto *A = cast<MipsInterruptAttr>(At);
+      return A->clone(C);
+    }
+    case attr::MipsLongCall: {
+      const auto *A = cast<MipsLongCallAttr>(At);
+      return A->clone(C);
+    }
+    case attr::MipsShortCall: {
+      const auto *A = cast<MipsShortCallAttr>(At);
       return A->clone(C);
     }
     case attr::Mode: {
@@ -593,6 +634,10 @@ Attr *instantiateTemplateAttribute(const Attr *At, ASTContext &C, Sema &S,
       const auto *A = cast<NoDuplicateAttr>(At);
       return A->clone(C);
     }
+    case attr::NoEscape: {
+      const auto *A = cast<NoEscapeAttr>(At);
+      return A->clone(C);
+    }
     case attr::NoInline: {
       const auto *A = cast<NoInlineAttr>(At);
       return A->clone(C);
@@ -621,6 +666,10 @@ Attr *instantiateTemplateAttribute(const Attr *At, ASTContext &C, Sema &S,
       const auto *A = cast<NoSplitStackAttr>(At);
       return A->clone(C);
     }
+    case attr::NoStackProtector: {
+      const auto *A = cast<NoStackProtectorAttr>(At);
+      return A->clone(C);
+    }
     case attr::NoThreadSafetyAnalysis: {
       const auto *A = cast<NoThreadSafetyAnalysisAttr>(At);
       return A->clone(C);
@@ -637,6 +686,10 @@ Attr *instantiateTemplateAttribute(const Attr *At, ASTContext &C, Sema &S,
       const auto *A = cast<NotTailCalledAttr>(At);
       return A->clone(C);
     }
+    case attr::OMPCaptureKind: {
+      const auto *A = cast<OMPCaptureKindAttr>(At);
+      return A->clone(C);
+    }
     case attr::OMPCaptureNoInit: {
       const auto *A = cast<OMPCaptureNoInitAttr>(At);
       return A->clone(C);
@@ -647,6 +700,10 @@ Attr *instantiateTemplateAttribute(const Attr *At, ASTContext &C, Sema &S,
     }
     case attr::OMPDeclareTargetDecl: {
       const auto *A = cast<OMPDeclareTargetDeclAttr>(At);
+      return A->clone(C);
+    }
+    case attr::OMPReferencedVar: {
+      const auto *A = cast<OMPReferencedVarAttr>(At);
       return A->clone(C);
     }
     case attr::OMPThreadPrivateDecl: {
@@ -819,6 +876,10 @@ Attr *instantiateTemplateAttribute(const Attr *At, ASTContext &C, Sema &S,
       const auto *A = cast<PureAttr>(At);
       return A->clone(C);
     }
+    case attr::RISCVInterrupt: {
+      const auto *A = cast<RISCVInterruptAttr>(At);
+      return A->clone(C);
+    }
     case attr::RegCall: {
       const auto *A = cast<RegCallAttr>(At);
       return A->clone(C);
@@ -972,6 +1033,10 @@ Attr *instantiateTemplateAttribute(const Attr *At, ASTContext &C, Sema &S,
     }
     case attr::TransparentUnion: {
       const auto *A = cast<TransparentUnionAttr>(At);
+      return A->clone(C);
+    }
+    case attr::TrivialABI: {
+      const auto *A = cast<TrivialABIAttr>(At);
       return A->clone(C);
     }
     case attr::TryAcquireCapability: {
@@ -1145,10 +1210,16 @@ Attr *instantiateTemplateAttributeForDecl(const Attr *At,
     case attr::AnyX86NoCallerSavedRegisters: {
       return nullptr;
     }
+    case attr::AnyX86NoCfCheck: {
+      return nullptr;
+    }
     case attr::ArcWeakrefUnavailable: {
       return nullptr;
     }
     case attr::ArgumentWithTypeTag: {
+      return nullptr;
+    }
+    case attr::Artificial: {
       return nullptr;
     }
     case attr::AsmLabel: {
@@ -1193,6 +1264,12 @@ Attr *instantiateTemplateAttributeForDecl(const Attr *At,
     case attr::CFUnknownTransfer: {
       return nullptr;
     }
+    case attr::CPUDispatch: {
+      return nullptr;
+    }
+    case attr::CPUSpecific: {
+      return nullptr;
+    }
     case attr::CUDAConstant: {
       return nullptr;
     }
@@ -1230,6 +1307,9 @@ Attr *instantiateTemplateAttributeForDecl(const Attr *At,
       return nullptr;
     }
     case attr::Cleanup: {
+      return nullptr;
+    }
+    case attr::CodeSeg: {
       return nullptr;
     }
     case attr::Cold: {
@@ -1353,6 +1433,9 @@ Attr *instantiateTemplateAttributeForDecl(const Attr *At,
     case attr::LayoutVersion: {
       return nullptr;
     }
+    case attr::LifetimeBound: {
+      return nullptr;
+    }
     case attr::LockReturned: {
       return nullptr;
     }
@@ -1392,10 +1475,19 @@ Attr *instantiateTemplateAttributeForDecl(const Attr *At,
     case attr::MinSize: {
       return nullptr;
     }
+    case attr::MinVectorWidth: {
+      return nullptr;
+    }
     case attr::Mips16: {
       return nullptr;
     }
     case attr::MipsInterrupt: {
+      return nullptr;
+    }
+    case attr::MipsLongCall: {
+      return nullptr;
+    }
+    case attr::MipsShortCall: {
       return nullptr;
     }
     case attr::Mode: {
@@ -1431,6 +1523,9 @@ Attr *instantiateTemplateAttributeForDecl(const Attr *At,
     case attr::NoDuplicate: {
       return nullptr;
     }
+    case attr::NoEscape: {
+      return nullptr;
+    }
     case attr::NoInline: {
       return nullptr;
     }
@@ -1452,6 +1547,9 @@ Attr *instantiateTemplateAttributeForDecl(const Attr *At,
     case attr::NoSplitStack: {
       return nullptr;
     }
+    case attr::NoStackProtector: {
+      return nullptr;
+    }
     case attr::NoThreadSafetyAnalysis: {
       return nullptr;
     }
@@ -1464,6 +1562,9 @@ Attr *instantiateTemplateAttributeForDecl(const Attr *At,
     case attr::NotTailCalled: {
       return nullptr;
     }
+    case attr::OMPCaptureKind: {
+      return nullptr;
+    }
     case attr::OMPCaptureNoInit: {
       return nullptr;
     }
@@ -1471,6 +1572,9 @@ Attr *instantiateTemplateAttributeForDecl(const Attr *At,
       return nullptr;
     }
     case attr::OMPDeclareTargetDecl: {
+      return nullptr;
+    }
+    case attr::OMPReferencedVar: {
       return nullptr;
     }
     case attr::OMPThreadPrivateDecl: {
@@ -1596,6 +1700,9 @@ Attr *instantiateTemplateAttributeForDecl(const Attr *At,
     case attr::Pure: {
       return nullptr;
     }
+    case attr::RISCVInterrupt: {
+      return nullptr;
+    }
     case attr::RegCall: {
       return nullptr;
     }
@@ -1681,6 +1788,9 @@ Attr *instantiateTemplateAttributeForDecl(const Attr *At,
       return nullptr;
     }
     case attr::TransparentUnion: {
+      return nullptr;
+    }
+    case attr::TrivialABI: {
       return nullptr;
     }
     case attr::TryAcquireCapability: {

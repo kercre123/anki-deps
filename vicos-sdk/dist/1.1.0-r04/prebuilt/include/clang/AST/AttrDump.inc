@@ -108,13 +108,14 @@
   }
   case attr::AllocAlign: {
     const auto *SA = cast<AllocAlignAttr>(A);
-    OS << " " << SA->getParamIndex();
+    OS << " " << SA->getParamIndex().getSourceIndex();
     break;
   }
   case attr::AllocSize: {
     const auto *SA = cast<AllocSizeAttr>(A);
-    OS << " " << SA->getElemSizeParam();
-    OS << " " << SA->getNumElemsParam();
+    OS << " " << SA->getElemSizeParam().getSourceIndex();
+    if (SA->getNumElemsParam().isValid())
+      OS << " " << SA->getNumElemsParam().getSourceIndex();
     break;
   }
   case attr::AlwaysInline: {
@@ -135,16 +136,23 @@
   case attr::AnyX86NoCallerSavedRegisters: {
     break;
   }
+  case attr::AnyX86NoCfCheck: {
+    break;
+  }
   case attr::ArcWeakrefUnavailable: {
     break;
   }
   case attr::ArgumentWithTypeTag: {
     OS << " " << A->getSpelling();
     const auto *SA = cast<ArgumentWithTypeTagAttr>(A);
-    OS << " " << SA->getArgumentKind()->getName();
-    OS << " " << SA->getArgumentIdx();
-    OS << " " << SA->getTypeTagIdx();
+    if (SA->getArgumentKind())
+      OS << " " << SA->getArgumentKind()->getName();
+    OS << " " << SA->getArgumentIdx().getSourceIndex();
+    OS << " " << SA->getTypeTagIdx().getSourceIndex();
     if (SA->getIsPointer()) OS << " IsPointer";
+    break;
+  }
+  case attr::Artificial: {
     break;
   }
   case attr::AsmLabel: {
@@ -155,7 +163,8 @@
   case attr::AssertCapability: {
     OS << " " << A->getSpelling();
     const auto *SA = cast<AssertCapabilityAttr>(A);
-    dumpStmt(SA->getExpr());
+    for (AssertCapabilityAttr::args_iterator I = SA->args_begin(), E = SA->args_end(); I != E; ++I)
+      dumpStmt(*I);
     break;
   }
   case attr::AssertExclusiveLock: {
@@ -178,7 +187,8 @@
   }
   case attr::Availability: {
     const auto *SA = cast<AvailabilityAttr>(A);
-    OS << " " << SA->getPlatform()->getName();
+    if (SA->getPlatform())
+      OS << " " << SA->getPlatform()->getName();
     OS << " " << SA->getIntroduced();
     OS << " " << SA->getDeprecated();
     OS << " " << SA->getObsoleted();
@@ -216,6 +226,18 @@
     break;
   }
   case attr::CFUnknownTransfer: {
+    break;
+  }
+  case attr::CPUDispatch: {
+    const auto *SA = cast<CPUDispatchAttr>(A);
+    for (const auto &Val : SA->cpus())
+      OS << " " << Val;
+    break;
+  }
+  case attr::CPUSpecific: {
+    const auto *SA = cast<CPUSpecificAttr>(A);
+    for (const auto &Val : SA->cpus())
+      OS << " " << Val;
     break;
   }
   case attr::CUDAConstant: {
@@ -278,6 +300,11 @@
     const auto *SA = cast<CleanupAttr>(A);
     OS << " ";
     dumpBareDeclRef(SA->getFunctionDecl());
+    break;
+  }
+  case attr::CodeSeg: {
+    const auto *SA = cast<CodeSegAttr>(A);
+    OS << " \"" << SA->getName() << "\"";
     break;
   }
   case attr::Cold: {
@@ -408,14 +435,15 @@
   }
   case attr::Format: {
     const auto *SA = cast<FormatAttr>(A);
-    OS << " " << SA->getType()->getName();
+    if (SA->getType())
+      OS << " " << SA->getType()->getName();
     OS << " " << SA->getFormatIdx();
     OS << " " << SA->getFirstArg();
     break;
   }
   case attr::FormatArg: {
     const auto *SA = cast<FormatArgAttr>(A);
-    OS << " " << SA->getFormatIdx();
+    OS << " " << SA->getFormatIdx().getSourceIndex();
     break;
   }
   case attr::GNUInline: {
@@ -470,6 +498,9 @@
   case attr::LayoutVersion: {
     const auto *SA = cast<LayoutVersionAttr>(A);
     OS << " " << SA->getVersion();
+    break;
+  }
+  case attr::LifetimeBound: {
     break;
   }
   case attr::LockReturned: {
@@ -568,6 +599,11 @@
   case attr::MinSize: {
     break;
   }
+  case attr::MinVectorWidth: {
+    const auto *SA = cast<MinVectorWidthAttr>(A);
+    OS << " " << SA->getVectorWidth();
+    break;
+  }
   case attr::Mips16: {
     break;
   }
@@ -604,9 +640,18 @@
     }
     break;
   }
+  case attr::MipsLongCall: {
+    OS << " " << A->getSpelling();
+    break;
+  }
+  case attr::MipsShortCall: {
+    OS << " " << A->getSpelling();
+    break;
+  }
   case attr::Mode: {
     const auto *SA = cast<ModeAttr>(A);
-    OS << " " << SA->getMode()->getName();
+    if (SA->getMode())
+      OS << " " << SA->getMode()->getName();
     break;
   }
   case attr::NSConsumed: {
@@ -639,6 +684,9 @@
   case attr::NoDuplicate: {
     break;
   }
+  case attr::NoEscape: {
+    break;
+  }
   case attr::NoInline: {
     break;
   }
@@ -663,6 +711,9 @@
   case attr::NoSplitStack: {
     break;
   }
+  case attr::NoStackProtector: {
+    break;
+  }
   case attr::NoThreadSafetyAnalysis: {
     break;
   }
@@ -672,10 +723,15 @@
   case attr::NonNull: {
     const auto *SA = cast<NonNullAttr>(A);
     for (const auto &Val : SA->args())
-      OS << " " << Val;
+      OS << " " << Val.getSourceIndex();
     break;
   }
   case attr::NotTailCalled: {
+    break;
+  }
+  case attr::OMPCaptureKind: {
+    const auto *SA = cast<OMPCaptureKindAttr>(A);
+    OS << " " << SA->getCaptureKind();
     break;
   }
   case attr::OMPCaptureNoInit: {
@@ -721,6 +777,11 @@
     }
     break;
   }
+  case attr::OMPReferencedVar: {
+    const auto *SA = cast<OMPReferencedVarAttr>(A);
+    dumpStmt(SA->getRef());
+    break;
+  }
   case attr::OMPThreadPrivateDecl: {
     break;
   }
@@ -729,17 +790,20 @@
   }
   case attr::ObjCBridge: {
     const auto *SA = cast<ObjCBridgeAttr>(A);
-    OS << " " << SA->getBridgedType()->getName();
+    if (SA->getBridgedType())
+      OS << " " << SA->getBridgedType()->getName();
     break;
   }
   case attr::ObjCBridgeMutable: {
     const auto *SA = cast<ObjCBridgeMutableAttr>(A);
-    OS << " " << SA->getBridgedType()->getName();
+    if (SA->getBridgedType())
+      OS << " " << SA->getBridgedType()->getName();
     break;
   }
   case attr::ObjCBridgeRelated: {
     const auto *SA = cast<ObjCBridgeRelatedAttr>(A);
-    OS << " " << SA->getRelatedClass()->getName();
+    if (SA->getRelatedClass())
+      OS << " " << SA->getRelatedClass()->getName();
     if (SA->getClassMethod())
       OS << " " << SA->getClassMethod()->getName();
     if (SA->getInstanceMethod())
@@ -840,9 +904,10 @@
   case attr::Ownership: {
     OS << " " << A->getSpelling();
     const auto *SA = cast<OwnershipAttr>(A);
-    OS << " " << SA->getModule()->getName();
+    if (SA->getModule())
+      OS << " " << SA->getModule()->getName();
     for (const auto &Val : SA->args())
-      OS << " " << Val;
+      OS << " " << Val.getSourceIndex();
     break;
   }
   case attr::Packed: {
@@ -918,6 +983,21 @@
     break;
   }
   case attr::Pure: {
+    break;
+  }
+  case attr::RISCVInterrupt: {
+    const auto *SA = cast<RISCVInterruptAttr>(A);
+    switch(SA->getInterrupt()) {
+    case RISCVInterruptAttr::user:
+      OS << " user";
+      break;
+    case RISCVInterruptAttr::supervisor:
+      OS << " supervisor";
+      break;
+    case RISCVInterruptAttr::machine:
+      OS << " machine";
+      break;
+    }
     break;
   }
   case attr::RegCall: {
@@ -1070,6 +1150,9 @@
   case attr::TransparentUnion: {
     break;
   }
+  case attr::TrivialABI: {
+    break;
+  }
   case attr::TryAcquireCapability: {
     OS << " " << A->getSpelling();
     const auto *SA = cast<TryAcquireCapabilityAttr>(A);
@@ -1080,7 +1163,8 @@
   }
   case attr::TypeTagForDatatype: {
     const auto *SA = cast<TypeTagForDatatypeAttr>(A);
-    OS << " " << SA->getArgumentKind()->getName();
+    if (SA->getArgumentKind())
+      OS << " " << SA->getArgumentKind()->getName();
     OS << " " << SA->getMatchingCType().getAsString();
     if (SA->getLayoutCompatible()) OS << " LayoutCompatible";
     if (SA->getMustBeNull()) OS << " MustBeNull";
